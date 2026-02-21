@@ -1,2 +1,6 @@
 # app-shiny-basketarg
-Aplicación interactiva desarrollada en R utilizando Shiny para visualizar y analizar estadísticas de partidos de la Liga Nacional de Básquet de Argentina, permitiendo explorar métricas por equipo, temporada y condición de juego.
+📊 Análisis de la Liga Nacional de Básquet — App Shiny
+
+Esta aplicación interactiva fue desarrollada en R utilizando el paquete Shiny con el objetivo de analizar estadísticas de partidos de la Liga Nacional de Básquet de Argentina.
+
+La app permite explorar métricas de rendimiento por equipo mediante visualizaciones interactivas y filtros dinámicos, facilitando el análisis comparativo entre temporadas, condiciones de juego y resultados.
