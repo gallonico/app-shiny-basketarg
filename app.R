@@ -1,4 +1,4 @@
-library(shiny)
+# CARGAR LA APP
 
 source("global.R")
 source("ui.R")

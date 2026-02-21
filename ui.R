@@ -1,7 +1,4 @@
 # Creacion de la interfaz de usuario
-library(shiny)
-library(bslib)
-library(plotly)
 
 page_sidebar(
   # Definición del título más la imagen

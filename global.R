@@ -1,8 +1,14 @@
-# CARGAR DATOS
-library(readxl)
-library(tidyverse)
-library(dplyr)
-library(remotes)
+# Paquetes necesarios
+paquetes <- c("shiny", "readxl", "tidyverse", "dplyr", "remotes", "bslib", "plotly", "writexl",
+              "DT", "viridis", "ggridges","openxlsx")
+
+instalar <- paquetes %in% installed.packages()[, "Package"]
+
+if (any(!instalar)) {
+  install.packages(paquetes[!instalar])
+}
+
+lapply(paquetes, library, character.only = TRUE)
 
 # Instalar el paquete de datos desde GitHub si aun no esta instalado
 if (!requireNamespace("basketarg", quietly = TRUE)) {

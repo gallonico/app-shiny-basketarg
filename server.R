@@ -1,10 +1,4 @@
-library(shiny)
-library(plotly)
-library(writexl)
-library(DT)
-library(viridis)
-library(ggridges)
-library(openxlsx)
+# Creacion del servidor
 
 function(input, output, session) {
   
