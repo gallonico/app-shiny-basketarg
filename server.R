@@ -37,7 +37,7 @@ function(input, output, session) {
     req(input$filtro_comparar)
     if(input$filtro_comparar == "Ninguno") return(NULL)
     secundarios <- setdiff(c("Temp", "Condicion", "Resultado"), input$filtro_comparar)
-    selectInput("filtro_secundario", "Filtro secundario (opcional):",
+    selectInput("filtro_secundario", NULL,
                 choices = c("Ninguno" = "Ninguno", setNames(secundarios, nombres_filtros[secundarios])),
                 selected = "Ninguno")
   })
@@ -47,7 +47,7 @@ function(input, output, session) {
     req(input$filtro_comparar2)
     if(input$filtro_comparar2 == "Ninguno") return(NULL)
     secundarios <- setdiff(c("Temp", "Condicion", "Resultado"), input$filtro_comparar2)
-    selectInput("filtro_secundario2", "Filtro secundario (opcional):",
+    selectInput("filtro_secundario2", NULL,
                 choices = c("Ninguno" = "Ninguno", setNames(secundarios, nombres_filtros[secundarios])),
                 selected = "Ninguno")
   })
@@ -60,7 +60,7 @@ function(input, output, session) {
     }
     # Determinar la variable restante para terciario
     resto <- setdiff(c("Temp", "Condicion", "Resultado"), c(input$filtro_comparar2, input$filtro_secundario2))
-    selectInput("filtro_terciario2", "Filtro terciario (opcional):",
+    selectInput("filtro_terciario2", NULL,
                 choices = c("Ninguno" = "Ninguno", setNames(resto, nombres_filtros[resto])),
                 selected = "Ninguno")
   })
@@ -85,28 +85,34 @@ function(input, output, session) {
     
     tagList(
       if(!("Temp" %in% filtros_a_ocultar)){
+        div(
+          style = "margin-bottom:5px;",
         checkboxGroupInput(
           "temp",
           "Temporada:",
           choices = c("2021 / 2022" = "21/22", "2022 / 2023" = "22/23", "2023 / 2024" = "23/24"),
           selected = c("21/22","22/23","23/24")
-        )
+        ))
       },
       if(!("Condicion" %in% filtros_a_ocultar)){
+        div(
+          style = "margin-bottom:5px;",
         checkboxGroupInput(
           "cond",
           "Condición:",
           choices = c("Local" = "Local", "Visitante" = "Visit"),
           selected = c("Local","Visit")
-        )
+        ))
       },
       if(!("Resultado" %in% filtros_a_ocultar)){
+        div(
+          style = "margin-bottom:5px;",
         checkboxGroupInput(
           "res",
           "Resultado:",
           choices = c("Triunfo" = "G", "Derrota" = "P"),
           selected = c("G","P")
-        )
+        ))
       }
     )
   })
@@ -149,27 +155,28 @@ function(input, output, session) {
     
     # Actualizamos var1 (excluyendo var2)
     opciones_var1 <- setdiff(todas_vars, input$var2)
-    updateSelectInput(session, "var1", choices = c("Seleccione..." = "", setNames(opciones_var1, nombres_var[opciones_var1])), selected = if (input$var1 %in% opciones_var1) input$var1 else "")
+    updateSelectInput(session, "var1", choices = c("Seleccionar..." = "", setNames(opciones_var1, nombres_var[opciones_var1])), selected = if (input$var1 %in% opciones_var1) input$var1 else "")
     
     # Actualizamos var2 (excluyendo var1)
     opciones_var2 <- setdiff(todas_vars, input$var1)
-    updateSelectInput(session, "var2", choices = c("Seleccione..." = "", setNames(opciones_var2, nombres_var[opciones_var2])), selected = if (input$var2 %in% opciones_var2) input$var2 else "")
+    updateSelectInput(session, "var2", choices = c("Seleccionar..." = "", setNames(opciones_var2, nombres_var[opciones_var2])), selected = if (input$var2 %in% opciones_var2) input$var2 else "")
   })
   
   # Gráfico de boxplot
   output$graf1 <- renderPlotly({
-    validate(need(input$var_uni != "", "📊 Seleccione una variable para visualizar el gráfico."))
+    validate(need(input$var_uni != "", "📊 Seleccionar una variable para visualizar el gráfico."))
     
     datos <- datos_filtrados_sin_var() %>% filter(!is.na(.data[[input$var_uni]]))
     validate(need(nrow(datos) > 1, "⚠️ No hay suficientes datos para graficar."))
     
     if(input$filtro_comparar == "Ninguno"){
       datos <- datos %>% mutate(Equipo = forcats::fct_reorder(Equipo, .data[[input$var_uni]], .fun = median, .desc = TRUE))
+      
       p <- ggplot(datos, aes(x = Equipo, y = .data[[input$var_uni]], fill = Equipo,
                              text = paste0("Equipo: ", Equipo, "<br>Valor: ", round(.data[[input$var_uni]], 2)))) +
         geom_boxplot(alpha = 0.6, outlier.colour = "red", outlier.alpha = 0.6) +
         theme_minimal() +
-        labs(title = "Distribución de la variable seleccionada", x = NULL, y = nombres_var[input$var_uni]) +
+        labs(title = NULL, x = NULL, y = nombres_var[input$var_uni]) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none")
       
     } else {
@@ -200,7 +207,6 @@ function(input, output, session) {
                                  "Condicion" = c("Local", "Visitante"),
                                  "Resultado" = c("Triunfo", "Derrota"))
           
-          # Ordenar primero por filas (otro_var) y luego por columnas (Temp)
           niveles_facet <- c()
           for(f in niveles_otro){
             for(t in niveles_temp){
@@ -234,7 +240,7 @@ function(input, output, session) {
         geom_boxplot(alpha = 0.6, outlier.colour = "red", outlier.alpha = 0.6) +
         do.call(facet_wrap, c(as.formula(paste("~", facet_var)), facet_params)) +
         theme_minimal() +
-        labs(title = "Distribución de la variable seleccionada por filtro(s)", x = NULL, y = nombres_var[input$var_uni]) +
+        labs(title = NULL, x = NULL, y = nombres_var[input$var_uni]) +
         theme(axis.text.x = element_text(angle = 45, hjust = 1), legend.position = "none")
     }
     
@@ -242,10 +248,11 @@ function(input, output, session) {
       layout(
         title = list(
           text = if (input$filtro_comparar == "Ninguno") {
-            paste0("Distribución de la variable seleccionada\n", subtitulo_filtros())
+            paste0(subtitulo_filtros())
           } else {
-            "Distribución de la variable seleccionada"
-          }
+            NULL
+          },
+          x = 0.5
         )
       ) %>%
       config(displayModeBar = FALSE)
@@ -256,7 +263,7 @@ function(input, output, session) {
   # Gráfico de dispersión con filtro terciario
   output$graf2 <- renderPlotly({
     validate(
-      need(input$var1 != "" && input$var2 != "", "📊 Seleccione dos variables para visualizar el gráfico")
+      need(input$var1 != "" && input$var2 != "", "📊 Seleccionar dos variables para visualizar el gráfico")
     )
     
     datos <- datos_filtrados_sin_var() %>%
@@ -350,13 +357,13 @@ function(input, output, session) {
     }
     
     if (input$filtro_comparar2 == "Ninguno") {
-      p <- p + labs(title = paste0("Relación entre variables seleccionadas\n", subtitulo_filtros()))
+      p <- p + labs(title = paste0(subtitulo_filtros()))
     } else {
-      p <- p + labs(title = "Relación entre variables seleccionadas")
+      NULL
     }
     
     ggplotly(p, tooltip = "text") %>%
-      layout(title = list(text = p$labels$title), margin = list(t = 60)) %>%
+      layout(title = NULL, margin = list(t = 60)) %>%
       config(displayModeBar = FALSE)
   })
   
@@ -409,7 +416,7 @@ function(input, output, session) {
       scale_fill_gradient2(low = "red", mid = "white", high = "blue", midpoint = 0, name = "Z-score") +
       theme_minimal() +
       labs(
-        title = paste0("Mapa de calor por equipo y variable\n", subtitulo_filtros()),
+        title = paste0(subtitulo_filtros()),
         x = "Variable",
         y = "Equipo"
       ) +
@@ -418,7 +425,7 @@ function(input, output, session) {
     
     # Convertir a plotly
     ggplotly(p, tooltip = "text") %>%
-      layout(title = list(text = p$labels$title), margin = list(t = 60)) %>%
+      layout(title = NULL, margin = list(t = 60)) %>%
       config(displayModeBar = FALSE)
   })
   
@@ -455,12 +462,12 @@ function(input, output, session) {
       geom_tile() +
       scale_fill_gradient2(low = "red", mid = "white", high = "blue", midpoint = 0, limits = c(-1, 1), name = "Correlación") +
       theme_minimal() +
-      labs(title = paste0("Correlograma\n", subtitulo_filtros()), x = NULL, y = NULL) +
+      labs(title = paste0(subtitulo_filtros()), x = NULL, y = NULL) +
       theme(axis.text.x = element_text(angle = 45, hjust = 1), panel.grid = element_blank())
     
     # Convertir a plotly
     ggplotly(p, tooltip = "text") %>%
-      layout(title = list(text = p$labels$title), margin = list(t = 60)) %>%
+      layout(title = NULL, margin = list(t = 60)) %>%
       config(displayModeBar = FALSE)
   })
   

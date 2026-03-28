@@ -1,144 +1,253 @@
 # Creacion de la interfaz de usuario
 
-page_sidebar(
-  # Definición del título más la imagen
+page_navbar(
+  # Título + imagen
   title = tagList(
     "Estadísticas de la Liga Nacional de Básquet Argentina",
-    tags$img(src = "i3.png", height = "50px")
+    tags$img(src = "i3.png", height = "50px", style = "margin-left: 15px;")
+  ),
+  theme = bs_theme(
+    bootswatch = "cosmo",   # base limpia
+    primary = "#CD3333",     # color protagonista
+    secondary = "#4F4F4F",   # gris oscuro elegante
+    body_bg = "#F5F5F5",     # gris claro (mejor que blanco puro)
+    body_color = "#1A1A1A",  # texto oscuro
+    base_font = font_google("Roboto")
   ),
   
-  sidebar = sidebar(
-    # Filtros condicionales: solo se muestran en las pestañas de caja y dispersión
-    conditionalPanel(
-      condition = "input.Paneldevisualizaciones == 'Rendimiento por variable'",
-      selectInput(
-        "var_uni",
-        "Variable:",
-        choices = c("Seleccione..." = "", setNames(names(nombres_var), nombres_var))
-      )
-    ),
-    conditionalPanel(
-      condition = "input.Paneldevisualizaciones == 'Patrones entre variables'",
-      selectInput(
-        "var1",
-        "Variable 1:",
-        choices = c("Seleccione..." = "", setNames(names(nombres_var), nombres_var))
-      ),
-      selectInput(
-        "var2",
-        "Variable 2:",
-        choices = c("Seleccione..." = "", setNames(names(nombres_var), nombres_var))
-      )
-    ),
+  tags$head(
+    tags$style(HTML("
+    .navbar-nav {
+      margin-left: 30px;
+    }
     
-    # Filtro principal
-    conditionalPanel(
-      condition = "input.Paneldevisualizaciones == 'Rendimiento por variable'",
-      selectInput(
-        "filtro_comparar",
-        "Comparar por filtro principal:",
-        choices = c("Ninguno", "Temporada" = "Temp", "Condición" = "Condicion", "Resultado"),
-        selected = "Ninguno"
-      )
-    ),
-    conditionalPanel(
-      condition = "input.Paneldevisualizaciones == 'Patrones entre variables'",
-      selectInput(
-        "filtro_comparar2",
-        "Comparar por filtro principal:",
-        choices = c("Ninguno", "Temporada" = "Temp", "Condición" = "Condicion", "Resultado"),
-        selected = "Ninguno"
-      )
-    ),
+    .navbar-brand {
+      font-size: 25px;
+    }
     
-    # Filtro secundario dinámico
-    conditionalPanel(
-      condition = "input.Paneldevisualizaciones == 'Rendimiento por variable'",
-      uiOutput("filtro_secundario_ui")
-    ),
-    conditionalPanel(
-      condition = "input.Paneldevisualizaciones == 'Patrones entre variables'",
-      uiOutput("filtro_secundario2_ui")
-    ),
-    
-    # Filtro terciario dinámico (solo dispersión)
-    conditionalPanel(
-      condition = "input.Paneldevisualizaciones == 'Patrones entre variables'",
-      uiOutput("filtro_terciario2_ui")
-    ),
-    
-    # Filtros de temporada, condición y resultado
-    uiOutput("checkboxes_filtros_ui")
+    .radio-inline {
+    margin-right: 25px;
+  }
+  "))
   ),
   
+  # -------------------------------
+  # PESTAÑA CON SIDEBAR
+  # -------------------------------
   
-  # Definición de las pestañas de visualizaciones
-  navset_card_underline(
-    id = "Paneldevisualizaciones",
-    title = "Panel de visualizaciones",
+  nav_panel(
+    "Panel de visualizaciones",
     
-    nav_panel(
-      "Rendimiento por variable",
-      plotlyOutput("graf1")
-    ),
-    nav_panel(
-      "Patrones entre variables",
-      plotlyOutput("graf2")
-    ),
-    # Nueva pestaña combinada de mapas
-    nav_panel(
-      "Desempeño y relaciones",
-      fluidRow(
-        # Columna del Mapa de calor
-        column(
-          width = 6,
-          plotlyOutput("graf3"),
-          p(
-            "Muestra cómo se comparan los equipos en cada variable, destacando con colores más intensos a los equipos cuyos valores se alejan más de la media: rojo para valores negativos y azul para positivos.",
-            style = "font-size:14px;"
+    layout_sidebar(
+      
+      sidebar = sidebar(
+        width = 265,
+        h6("Filtros", style = "margin-bottom: 1px; font-weight: bold;"),
+        
+        # ------------------
+        # VARIABLES
+        # ------------------
+        conditionalPanel(
+          condition = "input.Paneldevisualizaciones == 'Rendimiento por variable'",
+          
+          div(
+            style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
+            
+            h6("Variables", style = "margin-bottom:10px; font-weight:600;"),
+            
+            selectInput(
+              "var_uni",
+              NULL,
+              choices = c("Seleccionar..." = "", setNames(names(nombres_var), nombres_var)),
+              width = "100%"
+            )
           )
         ),
-        # Columna del Correlograma
-        column(
-          width = 6,
-          plotlyOutput("graf4"),
-          p(
-            "Muestra la correlación entre las variables. Los tonos más intensos indican correlaciones más fuertes: azul para correlaciones positivas y rojo para negativas.",
-            style = "font-size:14px;"
+        
+        conditionalPanel(
+          condition = "input.Paneldevisualizaciones == 'Patrones entre variables'",
+          
+          div(
+            style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
+            
+            h6("Variables", style = "margin-bottom:10px; font-weight:600;"),
+            
+            selectInput(
+              "var1",
+              NULL,
+              choices = c("Seleccionar..." = "", setNames(names(nombres_var), nombres_var)),
+              width = "100%"
+            ),
+            
+            div(style="margin-bottom:10px;"),
+            
+            selectInput(
+              "var2",
+              NULL,
+              choices = c("Seleccionar..." = "", setNames(names(nombres_var), nombres_var)),
+              width = "100%"
+            )
           )
+        ),
+        
+        # ------------------
+        # COMPARACIÓN + FILTROS ESPECÍFICOS
+        # ------------------
+        
+        conditionalPanel(
+          condition = "input.Paneldevisualizaciones == 'Rendimiento por variable'",
+          
+          div(
+            style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
+            
+            h6("Segmentar por", style = "margin-bottom:10px; font-weight:600;"),
+            
+            selectInput(
+              "filtro_comparar",
+              NULL,
+              choices = c("Ninguno", "Temporada" = "Temp", "Condición" = "Condicion", "Resultado"),
+              selected = "Ninguno",
+              width = "100%"
+            ),
+            
+            # Filtros específicos (solo si corresponde)
+            conditionalPanel(
+              condition = "input.filtro_comparar != 'Ninguno'",
+              
+              div(style="margin-top:10px;"),  # espacio
+              
+              uiOutput("filtro_secundario_ui")
+            )
+          )
+        ),
+        
+        conditionalPanel(
+          condition = "input.Paneldevisualizaciones == 'Patrones entre variables'",
+          
+          div(
+            style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
+            
+            h6("Segmentar por", style = "margin-bottom:10px; font-weight:600;"),
+            
+            selectInput(
+              "filtro_comparar2",
+              NULL,
+              choices = c("Ninguno", "Temporada" = "Temp", "Condición" = "Condicion", "Resultado"),
+              selected = "Ninguno",
+              width = "100%"
+            ),
+            
+            # Filtros específicos
+            conditionalPanel(
+              condition = "input.filtro_comparar2 != 'Ninguno'",
+              
+              div(style="margin-top:10px;"),
+              
+              uiOutput("filtro_secundario2_ui"),
+              uiOutput("filtro_terciario2_ui")
+            )
+          )
+        ),
+        
+        # ------------------
+        # FILTROS GENERALES (SIEMPRE VISIBLES)
+        # ------------------
+          uiOutput("checkboxes_filtros_ui")
+      ),
+      
+      # CONTENIDO
+      navset_card_underline(
+        id = "Paneldevisualizaciones",
+        
+        nav_panel(
+          "Rendimiento por variable",
+          card(
+          card_header("Distribución de la variable"),
+          full_screen = T,
+          plotlyOutput("graf1")
+        )),
+        
+        nav_panel(
+          "Patrones entre variables",
+          card(
+          card_header("Relación entre variables"),
+          full_screen = T,
+          plotlyOutput("graf2")
+        )),
+        
+        nav_panel(
+          "Desempeño y relaciones",
+          fluidRow(
+            column(
+              width = 6,
+              card(
+              card_header("Mapa de calor por equipo y variable"),
+              full_screen = T,
+              plotlyOutput("graf3"),
+              p(
+                "Muestra cómo se comparan los equipos en cada variable, destacando con colores más intensos a los equipos cuyos valores se alejan más de la media: rojo para valores negativos y azul para positivos.",
+                style = "font-size:14px;"
+              )
+            )),
+            column(
+              width = 6,
+              card(
+              card_header("Correlograma"),
+              full_screen = T,
+              plotlyOutput("graf4",),
+              p(
+                "Muestra la correlación entre las variables. Los tonos más intensos indican correlaciones más fuertes: azul para correlaciones positivas y rojo para negativas.",
+                style = "font-size:14px;"
+              )
+            )
+          )
+        )),
+        
+        nav_panel(
+          "Exportar datos",
+          radioButtons(
+            "tipo_datos",
+            "Dataset sobre:",
+            choices = c("Equipos" = "equipos", "Jugadores" = "jugadores"),
+            selected = "equipos",
+            inline = TRUE
+          ),
+          selectInput(
+            "formato_descarga",
+            "Formato del archivo:",
+            choices = c("CSV" = "csv", "Excel" = "xlsx")
+          ),
+          selectizeInput(
+            "equipos_descarga",
+            "Seleccionar equipos:",
+            choices = sort(unique(equipos$Equipo)),
+            multiple = TRUE,
+            selected = NULL,
+            options = list(placeholder = 'Todos los equipos')
+          ),
+          div(
+            style = "margin-top: 15px;",
+            downloadButton(
+              "descargar_datos",
+              "Descargar datos",
+              class = "btn-primary btn-lg w-100"
+            )
+          ),
+          br(), br(),
+          DT::dataTableOutput("tabla_preview")
         )
       )
-    ),
+    )
+  ),
+  
+  # -------------------------------
+  # PESTAÑA SIN SIDEBAR
+  # -------------------------------
+  
+  nav_panel(
+    "Sobre la app",
     
-    nav_panel(
-      "Exportar datos",
-      radioButtons(
-        "tipo_datos",
-        "Dataset sobre:",
-        choices = c("Equipos" = "equipos", "Jugadores" = "jugadores"),
-        selected = "equipos",
-        inline = TRUE
-      ),
-      selectInput(
-        "formato_descarga",
-        "Formato de archivo:",
-        choices = c("CSV" = "csv", "Excel" = "xlsx")
-      ),
-      selectizeInput(
-        "equipos_descarga",
-        "Seleccionar equipos:",
-        choices = sort(unique(equipos$Equipo)),
-        multiple = TRUE,
-        selected = NULL,
-        options = list(placeholder = 'Todos los equipos')
-      ),
-      downloadButton("descargar_datos", "Descargar archivo"),
-      br(), br(),
-      DT::dataTableOutput("tabla_preview")
-    ),
-    
-    nav_panel(
-      "Sobre la app",
+    fluidPage(
       h4("Información general"),
       p("El objetivo principal de esta aplicación es proporcionar al usuario una herramienta interactiva para explorar y analizar el rendimiento de los equipos de la Liga Nacional de Básquet Argentina. La misma permite realizar comparaciones útiles de diversas variables entre los equipos teniendo en cuenta el desempeño por temporada, condición y resultado."),
       br(),
