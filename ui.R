@@ -32,6 +32,92 @@ page_navbar(
   ),
   
   # -------------------------------
+  # PESTAÑA INICIO
+  # -------------------------------
+  
+  nav_panel(
+    "Inicio",
+    
+    # Imagen
+    div( 
+      style = "text-align: center; max-width: 2000px; margin: auto; margin-top:5px;",
+      
+      div(
+        style = "
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top:20px;
+        gap: 10px;
+      ",
+        img(src = "bas1.jpg", height = "120px"),
+        img(src = "bas2.jpg", height = "120px"),
+        img(src = "bas3.jpg", height = "120px"),
+        img(src = "bas4.jpg", height = "120px"),
+        img(src = "bas5.jpg", height = "120px")
+      ),
+      
+      br(),
+      
+      h1("Visualización de datos para el análisis del rendimiento deportivo",
+         style = "margin-bottom:15px; color:#CD3333;"),
+      
+      div(
+        style = "text-align: center; line-height: 1.4; color:#4F4F4F;",
+        
+        p(
+          "Aplicación interactiva para el análisis de datos de partidos de la Liga Nacional de Básquet Argentina.",
+          style = "margin-bottom: 5px;"
+        ),
+        
+        p(
+          "Facilita la exploración de la información y el estudio del rendimiento de los equipos a partir de diferentes enfoques visuales.",
+          style = "margin-top: 0px;"
+        )
+      ),
+      
+      br(),
+      
+      layout_columns(
+        col_widths = c(4, 4, 4),
+        
+        bslib::card(
+          style = "
+          border-radius: 12px;
+          border-top: 4px solid #CD3333;
+          background-color: white;",
+          bslib::card_body(
+            h5("🔍 Exploración de datos"),
+            p("Visualización de estadísticas de partidos con navegación dinámica de la información.")
+          )
+        ),
+        
+        bslib::card(
+          style = "
+          border-radius: 12px;
+          border-top: 4px solid #CD3333;
+          background-color: white;",
+          bslib::card_body(
+            h5("📈 Análisis de rendimiento"),
+            p("Evaluación del desempeño de los equipos e identificación de patrones de juego.")
+          )
+        ),
+        
+        bslib::card(
+          style = "
+          border-radius: 12px;
+          border-top: 4px solid #CD3333;
+          background-color: white;",
+          bslib::card_body(
+            h5("⬇️ Exportación de datos"),
+            p("Descarga de datos filtrados para su análisis en herramientas externas.")
+          )
+        )
+      )
+    )
+  ),
+  
+  # -------------------------------
   # PESTAÑA CON SIDEBAR
   # -------------------------------
   
@@ -53,7 +139,7 @@ page_navbar(
           div(
             style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
             
-            h6("Variables", style = "margin-bottom:10px; font-weight:600;"),
+            h6("Variables", style = "margin-bottom:10px; font-weight:600; color:#CD3333;"),
             
             selectInput(
               "var_uni",
@@ -70,7 +156,7 @@ page_navbar(
           div(
             style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
             
-            h6("Variables", style = "margin-bottom:10px; font-weight:600;"),
+            h6("Variables", style = "margin-bottom:10px; font-weight:600; color:#CD3333;"),
             
             selectInput(
               "var1",
@@ -100,7 +186,7 @@ page_navbar(
           div(
             style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
             
-            h6("Segmentar por", style = "margin-bottom:10px; font-weight:600;"),
+            h6("Segmentar por", style = "margin-bottom:10px; font-weight:600; color:#CD3333;"),
             
             selectInput(
               "filtro_comparar",
@@ -127,7 +213,7 @@ page_navbar(
           div(
             style = "background-color:#f8f9fa; padding:12px; border-radius:10px; margin-bottom:1px; border:1px solid #e0e0e0;",
             
-            h6("Segmentar por", style = "margin-bottom:10px; font-weight:600;"),
+            h6("Segmentar por", style = "margin-bottom:10px; font-weight:600; color:#CD3333;"),
             
             selectInput(
               "filtro_comparar2",
@@ -248,16 +334,17 @@ page_navbar(
     "Sobre la app",
     
     fluidPage(
-      h4("Información general"),
-      p("El objetivo principal de esta aplicación es proporcionar al usuario una herramienta interactiva para explorar y analizar el rendimiento de los equipos de la Liga Nacional de Básquet Argentina. La misma permite realizar comparaciones útiles de diversas variables entre los equipos teniendo en cuenta el desempeño por temporada, condición y resultado."),
+      h4("Información general", style = "color:#CD3333;"),
+      p("El objetivo principal de esta aplicación es proporcionar al usuario una herramienta interactiva para explorar y analizar el rendimiento de los equipos de la Liga Nacional de Básquet Argentina.
+        La misma permite realizar comparaciones útiles de diversas variables entre los equipos teniendo en cuenta el desempeño por temporada, condición y resultado."),
       br(),
-      h4("Fuente de datos"),
+      h4("Fuente de datos", style = "color:#CD3333;"),
       p("Los datos utilizados fueron obtenidos mediante técnicas de web scraping de la página ",
         tags$a(href = "https://www.proballers.com/es", "https://www.proballers.com/es", target = "_blank"),
         " y corresponden a la fase regular de las temporadas 2021-2022, 2022-2023 y 2023-2024 de la Liga Nacional de Básquet Argentina."
       ),
       br(),
-      h4("Descripción de variables"),
+      h4("Descripción de variables", style = "color:#CD3333;"),
       tags$ul(
         tags$li(strong("id:"), " Identificador del partido (variable de soporte)."),
         tags$li(strong("source:"), " Código de referencia utilizado durante el web scraping (variable de soporte)."),
@@ -291,8 +378,9 @@ page_navbar(
         tags$li(strong("Estado:"), " Estado y disponibilidad de los datos del partido.")
       ),
       br(),
-      h4("Autor"),
-      p("Esta aplicación fue desarrollada por Nicolás Gallo como parte del trabajo de tesina de la carrera Licenciatura en Estadística en la Universidad Nacional de Rosario. Para la misma se utilizó el lenguaje de programación R y el paquete Shiny.")
+      h4("Autor", style = "color:#CD3333;"),
+      p("Esta aplicación fue desarrollada por Nicolás Gallo como parte del trabajo de tesina de la carrera Licenciatura en Estadística en la Universidad Nacional de Rosario.
+        Para la misma se utilizó el lenguaje de programación R y el paquete Shiny.")
     )
   )
 )
