@@ -271,7 +271,7 @@ page_navbar(
               full_screen = T,
               plotlyOutput("graf3"),
               p(
-                "Muestra cómo se comparan los equipos en cada variable, destacando con colores más intensos a los equipos cuyos valores se alejan más de la media: rojo para valores negativos y azul para positivos.",
+                "Muestra cómo se comparan los equipos en cada variable, destacando con colores más intensos a los equipos cuyos valores se alejan más de la media: blanco representa al promedio, rojo por debajo del promedio y azul, por encima.",
                 style = "font-size:14px;"
               )
             )),

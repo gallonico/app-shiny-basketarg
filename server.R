@@ -75,10 +75,21 @@ function(input, output, session) {
       filtro_terc <- if (input$Paneldevisualizaciones == "Rendimiento por variable") NULL else input$filtro_terciario2
       
       filtros_a_ocultar <- c()
-      if(!is.null(filtro_princ) && filtro_princ != "Ninguno") filtros_a_ocultar <- c(filtros_a_ocultar, filtro_princ)
-      if(!is.null(filtro_sec) && filtro_sec != "Ninguno") filtros_a_ocultar <- c(filtros_a_ocultar, filtro_sec)
-      if(!is.null(filtro_terc) && filtro_terc != "Ninguno") filtros_a_ocultar <- c(filtros_a_ocultar, filtro_terc)
-      
+      if(is.null(filtro_princ) || filtro_princ == "Ninguno"){
+        filtros_a_ocultar <- character(0)
+        
+      } else {
+        
+        filtros_a_ocultar <- c(filtro_princ)
+        
+        if(!is.null(filtro_sec) && filtro_sec != "Ninguno"){
+          filtros_a_ocultar <- c(filtros_a_ocultar, filtro_sec)
+          
+          if(!is.null(filtro_terc) && filtro_terc != "Ninguno"){
+            filtros_a_ocultar <- c(filtros_a_ocultar, filtro_terc)
+          }
+        }
+      }
     } else {
       filtros_a_ocultar <- character(0)
     }
@@ -274,8 +285,19 @@ function(input, output, session) {
       )
     
     filtro_princ <- input$filtro_comparar2
-    filtro_sec <- if(!is.null(input$filtro_secundario2) && input$filtro_secundario2 != "Ninguno") input$filtro_secundario2 else NULL
-    filtro_terc <- if(!is.null(input$filtro_terciario2) && input$filtro_terciario2 != "Ninguno") input$filtro_terciario2 else NULL
+    
+    if(filtro_princ == "Ninguno"){
+      filtro_sec <- NULL
+      filtro_terc <- NULL
+    } else {
+      filtro_sec <- if(!is.null(input$filtro_secundario2) && input$filtro_secundario2 != "Ninguno") input$filtro_secundario2 else NULL
+      
+      if(is.null(filtro_sec)){
+        filtro_terc <- NULL
+      } else {
+        filtro_terc <- if(!is.null(input$filtro_terciario2) && input$filtro_terciario2 != "Ninguno") input$filtro_terciario2 else NULL
+      }
+    }
     
     # Crear resumen incluyendo terciario si existe
     group_vars <- c("Equipo")
@@ -475,13 +497,19 @@ function(input, output, session) {
   
   # Vista previa de los datos filtrados
   output$tabla_preview <- DT::renderDataTable({
+    datos <- datos_filtrados_descarga()
+    
     DT::datatable(
-      datos_filtrados_descarga(),
+      datos,
       options = list(
-        pageLength = 10,          # filas por página por defecto
-        lengthMenu = c(5, 10, 20, 50, 100)  # opciones para filas por página
+        pageLength = 10,
+        lengthMenu = c(5, 10, 20, 50, 100)
       )
-    )
+    ) %>%
+      DT::formatRound(
+        columns = c("FG%", "1%"),
+        digits = 3
+      )
   })
   
   # Descarga de datos
