@@ -1,6 +1,19 @@
-# Paquetes necesarios
-paquetes <- c("shiny", "readxl", "tidyverse", "dplyr", "remotes", "bslib", "plotly", "writexl",
-              "DT", "viridis", "ggridges","openxlsx")
+# ============================================================
+# CONFIGURACIÓN DEL ENTORNO Y CARGA DE LIBRERÍAS
+# ============================================================
+
+# ------------------------------
+# Definición de paquetes necesarios
+# ------------------------------
+
+paquetes <- c(
+  "shiny", "readxl", "tidyverse", "dplyr", "remotes", "bslib",
+  "plotly", "writexl", "DT", "viridis", "ggridges","openxlsx"
+  )
+
+# ------------------------------
+# Instalación de paquetes faltantes
+# ------------------------------
 
 instalar <- paquetes %in% installed.packages()[, "Package"]
 
@@ -8,18 +21,41 @@ if (any(!instalar)) {
   install.packages(paquetes[!instalar])
 }
 
+# ------------------------------
+# Carga de librerías
+# ------------------------------
+
 lapply(paquetes, library, character.only = TRUE)
 
-# Instalar el paquete de datos desde GitHub si aun no esta instalado
+
+# ============================================================
+# CARGA DE DATOS DESDE PAQUETE EXTERNO
+# ============================================================
+
+# ------------------------------
+# Instalación del paquete de datos (si no está disponible)
+# ------------------------------
+
 if (!requireNamespace("basketarg", quietly = TRUE)) {
   remotes::install_github("gallonico/basketarg")
 }
 
-# Cargar datos desde el paquete
+# ------------------------------
+# Importación de datasets
+# ------------------------------
+
 equipos <- basketarg::equipos
 jugadores <- basketarg::jugadores
 
+
+# ============================================================
+# DICCIONARIOS DE VARIABLES Y FILTROS
+# ============================================================
+
+# ------------------------------
 # Diccionario de nombres de variables
+# ------------------------------
+
 nombres_var <- c(
   "2Con" = "Dobles convertidos",
   "2Int" = "Dobles intentados",
@@ -42,7 +78,10 @@ nombres_var <- c(
   "Dif"  = "Diferencia de puntos"
 )
 
+# ------------------------------
 # Diccionario de nombres de filtros
+# ------------------------------
+
 nombres_filtros <- c(
   "Temp"      = "Temporada",
   "Condicion" = "Condición",

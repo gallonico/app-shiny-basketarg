@@ -1,55 +1,77 @@
-# Creacion de la interfaz de usuario
+# ============================================================
+# ESTRUCTURA PRINCIPAL (NAVBAR)
+# ============================================================
 
 page_navbar(
-  # Título + imagen
+  
+# ------------------------------
+# Título e imagen
+# ------------------------------
+  
   title = tagList(
     "Estadísticas de la Liga Nacional de Básquet Argentina",
-    tags$img(src = "i3.png", height = "50px", style = "margin-left: 15px;")
-  ),
+    tags$img(
+      src = "i3.png",
+      height = "50px",
+      style = "margin-left: 15px;"
+      )
+    ),
+
+# ------------------------------
+# Tema visual
+# ------------------------------
+
   theme = bs_theme(
-    bootswatch = "cosmo",   # base limpia
-    primary = "#CD3333",     # color protagonista
-    secondary = "#4F4F4F",   # gris oscuro elegante
-    body_bg = "#F5F5F5",     # gris claro (mejor que blanco puro)
-    body_color = "#1A1A1A",  # texto oscuro
+    bootswatch = "cosmo",    # Base limpia
+    primary = "#CD3333",     # Color principal
+    secondary = "#4F4F4F",   # Gris oscuro
+    body_bg = "#F5F5F5",     # Fondo gris claro
+    body_color = "#1A1A1A",  # Texto principal
     base_font = font_google("Roboto")
-  ),
-  
+    ),
+
+# ------------------------------
+# Estilos personalizados (CSS)
+# ------------------------------
+
   tags$head(
     tags$style(HTML("
-    .navbar-nav {
-      margin-left: 30px;
-    }
+      .navbar-nav {
+        margin-left: 30px;
+      }
     
-    .navbar-brand {
-      font-size: 25px;
-    }
+      .navbar-brand {
+        font-size: 25px;
+      }
     
-    .radio-inline {
-    margin-right: 25px;
-  }
-  "))
+      .radio-inline {
+        margin-right: 25px;
+     }
+    "))
   ),
+
+
+# ============================================================
+# PESTAÑA: INICIO
+# ============================================================
   
-  # -------------------------------
-  # PESTAÑA INICIO
-  # -------------------------------
-  
-  nav_panel(
-    "Inicio",
+nav_panel(
+  "Inicio",
     
-    # Imagen
     div( 
       style = "text-align: center; max-width: 2000px; margin: auto; margin-top:5px;",
       
+# ------------------------------
+# Imágenes
+# ------------------------------
       div(
         style = "
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top:20px;
-        gap: 10px;
-      ",
+          display: flex;
+          justify-content: center;
+          flex-wrap: wrap;
+          margin-top:20px;
+          gap: 10px;
+        ",
         img(src = "bas1.jpg", height = "120px"),
         img(src = "bas2.jpg", height = "120px"),
         img(src = "bas3.jpg", height = "120px"),
@@ -58,10 +80,20 @@ page_navbar(
       ),
       
       br(),
+
+# ------------------------------
+# Título principal
+# ------------------------------
       
-      h1("Visualización de datos para el análisis del rendimiento deportivo",
-         style = "margin-bottom:15px; color:#CD3333;"),
+      h1(
+        "Visualización de datos para el análisis del rendimiento deportivo",
+         style = "margin-bottom:15px; color:#CD3333;"
+        ),
       
+# ------------------------------
+# Descripción
+# ------------------------------
+
       div(
         style = "text-align: center; line-height: 1.4; color:#4F4F4F;",
         
@@ -77,15 +109,20 @@ page_navbar(
       ),
       
       br(),
+
+# ------------------------------
+# Tarjetas informativas
+# ------------------------------
       
       layout_columns(
         col_widths = c(4, 4, 4),
         
         bslib::card(
           style = "
-          border-radius: 12px;
-          border-top: 4px solid #CD3333;
-          background-color: white;",
+            border-radius: 12px;
+            border-top: 4px solid #CD3333;
+            background-color: white;
+          ",
           bslib::card_body(
             h5("🔍 Exploración de datos"),
             p("Visualización de estadísticas de partidos con navegación dinámica de la información.")
@@ -94,9 +131,10 @@ page_navbar(
         
         bslib::card(
           style = "
-          border-radius: 12px;
-          border-top: 4px solid #CD3333;
-          background-color: white;",
+            border-radius: 12px;
+            border-top: 4px solid #CD3333;
+            background-color: white;
+          ",
           bslib::card_body(
             h5("📈 Análisis de rendimiento"),
             p("Evaluación del desempeño de los equipos e identificación de patrones de juego.")
@@ -105,9 +143,10 @@ page_navbar(
         
         bslib::card(
           style = "
-          border-radius: 12px;
-          border-top: 4px solid #CD3333;
-          background-color: white;",
+            border-radius: 12px;
+            border-top: 4px solid #CD3333;
+            background-color: white;
+          ",
           bslib::card_body(
             h5("⬇️ Exportación de datos"),
             p("Descarga de datos filtrados para su análisis en herramientas externas.")
@@ -117,9 +156,10 @@ page_navbar(
     )
   ),
   
-  # -------------------------------
-  # PESTAÑA CON SIDEBAR
-  # -------------------------------
+
+# ============================================================
+# PESTAÑA: PANEL DE VISUALIZACIONES
+# ============================================================
   
   nav_panel(
     "Panel de visualizaciones",
@@ -128,11 +168,13 @@ page_navbar(
       
       sidebar = sidebar(
         width = 265,
+        
         h6("Filtros", style = "margin-bottom: 1px; font-weight: bold;"),
         
-        # ------------------
-        # VARIABLES
-        # ------------------
+# ------------------------------
+# Selección de variables
+# ------------------------------
+
         conditionalPanel(
           condition = "input.Paneldevisualizaciones == 'Rendimiento por variable'",
           
@@ -176,9 +218,9 @@ page_navbar(
           )
         ),
         
-        # ------------------
-        # COMPARACIÓN + FILTROS ESPECÍFICOS
-        # ------------------
+# ------------------------------
+# Segmentación y filtros específicos
+# ------------------------------
         
         conditionalPanel(
           condition = "input.Paneldevisualizaciones == 'Rendimiento por variable'",
@@ -196,11 +238,10 @@ page_navbar(
               width = "100%"
             ),
             
-            # Filtros específicos (solo si corresponde)
             conditionalPanel(
               condition = "input.filtro_comparar != 'Ninguno'",
               
-              div(style="margin-top:10px;"),  # espacio
+              div(style="margin-top:10px;"),
               
               uiOutput("filtro_secundario_ui")
             )
@@ -223,7 +264,6 @@ page_navbar(
               width = "100%"
             ),
             
-            # Filtros específicos
             conditionalPanel(
               condition = "input.filtro_comparar2 != 'Ninguno'",
               
@@ -234,32 +274,50 @@ page_navbar(
             )
           )
         ),
+
+# ------------------------------
+# Filtros generales
+# ------------------------------
         
-        # ------------------
-        # FILTROS GENERALES (SIEMPRE VISIBLES)
-        # ------------------
           uiOutput("checkboxes_filtros_ui")
-      ),
+        ),
+
+# ------------------------------
+# Contenido principal (gráficos)
+# ------------------------------
       
-      # CONTENIDO
       navset_card_underline(
         id = "Paneldevisualizaciones",
         
+# ------------------------------
+# Gráfico: variable individual
+# ------------------------------
+
         nav_panel(
           "Rendimiento por variable",
           card(
-          card_header("Distribución de la variable"),
-          full_screen = T,
-          plotlyOutput("graf1")
-        )),
+            card_header("Distribución de la variable"),
+            full_screen = T,
+            plotlyOutput("graf1")
+          )
+        ),
+
+# ------------------------------
+# Gráfico: relación entre variables
+# ------------------------------
         
         nav_panel(
           "Patrones entre variables",
           card(
-          card_header("Relación entre variables"),
-          full_screen = T,
-          plotlyOutput("graf2")
-        )),
+            card_header("Relación entre variables"),
+            full_screen = T,
+            plotlyOutput("graf2")
+          )
+        ),
+
+# ------------------------------
+# Gráficos complementarios
+# ------------------------------
         
         nav_panel(
           "Desempeño y relaciones",
@@ -267,30 +325,37 @@ page_navbar(
             column(
               width = 6,
               card(
-              card_header("Mapa de calor por equipo y variable"),
-              full_screen = T,
-              plotlyOutput("graf3"),
-              p(
-                "Muestra cómo se comparan los equipos en cada variable, destacando con colores más intensos a los equipos cuyos valores se alejan más de la media: blanco representa al promedio, rojo por debajo del promedio y azul, por encima.",
-                style = "font-size:14px;"
+                card_header("Mapa de calor por equipo y variable"),
+                full_screen = T,
+                plotlyOutput("graf3"),
+                p(
+                  "Muestra cómo se comparan los equipos en cada variable, destacando con colores más intensos a los equipos cuyos valores se alejan más de la media: blanco representa al promedio, rojo por debajo del promedio y azul, por encima.",
+                  style = "font-size:14px;"
+                )
               )
-            )),
+            ),
             column(
               width = 6,
               card(
-              card_header("Correlograma"),
-              full_screen = T,
-              plotlyOutput("graf4",),
-              p(
-                "Muestra la correlación entre las variables. Los tonos más intensos indican correlaciones más fuertes: azul para correlaciones positivas y rojo para negativas.",
-                style = "font-size:14px;"
+                card_header("Correlograma"),
+                full_screen = T,
+                plotlyOutput("graf4"),
+                p(
+                  "Muestra la correlación entre las variables. Los tonos más intensos indican correlaciones más fuertes: azul para correlaciones positivas y rojo para negativas.",
+                  style = "font-size:14px;"
+                )
               )
             )
           )
-        )),
+        ),
+
+# ------------------------------
+# Exportación de datos
+# ------------------------------
         
         nav_panel(
           "Exportar datos",
+          
           radioButtons(
             "tipo_datos",
             "Dataset sobre:",
@@ -298,11 +363,13 @@ page_navbar(
             selected = "equipos",
             inline = TRUE
           ),
+          
           selectInput(
             "formato_descarga",
             "Formato del archivo:",
             choices = c("CSV" = "csv", "Excel" = "xlsx")
           ),
+          
           selectizeInput(
             "equipos_descarga",
             "Seleccionar equipos:",
@@ -311,6 +378,7 @@ page_navbar(
             selected = NULL,
             options = list(placeholder = 'Todos los equipos')
           ),
+          
           div(
             style = "margin-top: 15px;",
             downloadButton(
@@ -319,32 +387,60 @@ page_navbar(
               class = "btn-primary btn-lg w-100"
             )
           ),
+          
           br(), br(),
+          
           DT::dataTableOutput("tabla_preview")
         )
       )
     )
   ),
-  
-  # -------------------------------
-  # PESTAÑA SIN SIDEBAR
-  # -------------------------------
+
+
+# ============================================================
+# PESTAÑA: SOBRE LA APP
+# ============================================================  
   
   nav_panel(
     "Sobre la app",
     
     fluidPage(
+      
+# ------------------------------
+# Información general
+# ------------------------------
+      
       h4("Información general", style = "color:#CD3333;"),
-      p("El objetivo principal de esta aplicación es proporcionar al usuario una herramienta interactiva para explorar y analizar el rendimiento de los equipos de la Liga Nacional de Básquet Argentina.
+
+      p(
+        "El objetivo principal de esta aplicación es proporcionar al usuario una herramienta interactiva para explorar y analizar el rendimiento de los equipos de la Liga Nacional de Básquet Argentina.
         La misma permite realizar comparaciones útiles de diversas variables entre los equipos teniendo en cuenta el desempeño por temporada, condición y resultado."),
+
       br(),
+
+# ------------------------------
+# Fuente de datos
+# ------------------------------
+
       h4("Fuente de datos", style = "color:#CD3333;"),
+
       p("Los datos utilizados fueron obtenidos mediante técnicas de web scraping de la página ",
-        tags$a(href = "https://www.proballers.com/es", "https://www.proballers.com/es", target = "_blank"),
+        tags$a(
+          href = "https://www.proballers.com/es",
+          "https://www.proballers.com/es",
+          target = "_blank"
+        ),
         " y corresponden a la fase regular de las temporadas 2021-2022, 2022-2023 y 2023-2024 de la Liga Nacional de Básquet Argentina."
       ),
+
       br(),
+
+# ------------------------------
+# Descripción de variables
+# ------------------------------
+
       h4("Descripción de variables", style = "color:#CD3333;"),
+
       tags$ul(
         tags$li(strong("id:"), " Identificador del partido (variable de soporte)."),
         tags$li(strong("source:"), " Código de referencia utilizado durante el web scraping (variable de soporte)."),
@@ -377,8 +473,15 @@ page_navbar(
         tags$li(strong("Dif:"), " Diferencia de puntos en el partido entre el equipo y su rival."),
         tags$li(strong("Estado:"), " Estado y disponibilidad de los datos del partido.")
       ),
+
       br(),
+
+# ------------------------------
+# Autor
+# ------------------------------
+
       h4("Autor", style = "color:#CD3333;"),
+
       p("Esta aplicación fue desarrollada por Nicolás Gallo como parte del trabajo de tesina de la carrera Licenciatura en Estadística en la Universidad Nacional de Rosario.
         Para la misma se utilizó el lenguaje de programación R y el paquete Shiny.")
     )
